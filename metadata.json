@@ -1,0 +1,6 @@
+{
+  "name": "인테리어 3D 렌더링 투시도 상담",
+  "description": "인테리어 도면(DWG, PDF)을 업로드하고 성공적인 3D 투시도 제작을 위한 상담을 신청하세요.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
