@@ -5,8 +5,6 @@ export interface ConsultationData {
   preferredStyle: string;
   keyPoints: string;
   fileNames: string[];
-  fileUrls?: string[];
-  files?: File[];
   timestamp?: string;
 }
 

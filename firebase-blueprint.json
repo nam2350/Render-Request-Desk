@@ -1,0 +1,55 @@
+{
+  "collections": [
+    {
+      "name": "consultations",
+      "fields": [
+        {
+          "name": "projectName",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "contact",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "spaceType",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "preferredStyle",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "keyPoints",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "fileNames",
+          "type": "array",
+          "required": false
+        },
+        {
+          "name": "userId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "createdAt",
+          "type": "timestamp",
+          "required": true
+        }
+      ],
+      "rules": {
+        "read": "request.auth != null && request.auth.uid == resource.data.userId",
+        "create": "request.auth != null && request.auth.uid == request.resource.data.userId",
+        "update": "request.auth != null && request.auth.uid == resource.data.userId",
+        "delete": "request.auth != null && request.auth.uid == resource.data.userId"
+      }
+    }
+  ]
+}

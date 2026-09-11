@@ -28,7 +28,6 @@ const Section = ({ title, icon: Icon, children, description }: { title: string, 
 export function ConsultationForm({ onSubmit, isSubmitting }: Props) {
   const [formData, setFormData] = useState<Partial<ConsultationData>>({
     fileNames: [],
-    files: [],
   });
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -43,16 +42,14 @@ export function ConsultationForm({ onSubmit, isSubmitting }: Props) {
     const newFiles = files.map(f => f.name);
     setFormData(prev => ({
       ...prev,
-      fileNames: [...(prev.fileNames || []), ...newFiles],
-      files: [...(prev.files || []), ...files]
+      fileNames: [...(prev.fileNames || []), ...newFiles]
     }));
   };
 
   const removeFile = (indexToRemove: number) => {
     setFormData(prev => ({
       ...prev,
-      fileNames: prev.fileNames?.filter((_, index) => index !== indexToRemove),
-      files: prev.files?.filter((_, index) => index !== indexToRemove)
+      fileNames: prev.fileNames?.filter((_, index) => index !== indexToRemove)
     }));
   };
 
@@ -83,7 +80,6 @@ export function ConsultationForm({ onSubmit, isSubmitting }: Props) {
       preferredStyle: formData.preferredStyle || '',
       keyPoints: formData.keyPoints || '',
       fileNames: formData.fileNames || [],
-      files: formData.files || [],
       timestamp: new Date().toLocaleString('ko-KR'),
     });
   };
@@ -221,7 +217,7 @@ export function ConsultationForm({ onSubmit, isSubmitting }: Props) {
           {isSubmitting ? (
             <>
               <Loader2 size={18} className="animate-spin" />
-              업로드 및 처리 중...
+              처리 중...
             </>
           ) : (
             <>

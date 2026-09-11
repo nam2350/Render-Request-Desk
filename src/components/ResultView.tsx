@@ -24,7 +24,7 @@ const DisplayField = ({ label, value, isFullWidth = false }: { label: string; va
   );
 };
 
-export function ResultView({ data, onReset }: Props) {
+export function ResultView({ data, onReset, onGoToStudio }: Props) {
   const [copiedText, setCopiedText] = useState(false);
   const [copiedSheet, setCopiedSheet] = useState(false);
 
