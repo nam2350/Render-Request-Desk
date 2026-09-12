@@ -5,7 +5,17 @@ import { RenderingStudio } from './components/RenderingStudio';
 import { ConsultationData } from './types';
 import { Box, ChevronRight, Loader2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
-import { saveConsultation } from './lib/firebase';
+
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwTtB-l5cXLgTB1c4dVDKTbb5vDYAcJ08q_cqqyXppEICahKpGvTN8FG1tndMdWiTJfjg/exec";
+
+const fileToBase64 = (file: File): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = error => reject(error);
+  });
+};
 
 export default function App() {
   const [step, setStep] = useState<'form' | 'result' | 'studio'>('form');
@@ -18,7 +28,39 @@ export default function App() {
     let finalData = { ...data };
 
     try {
-      await saveConsultation(finalData);
+      const base64Files = [];
+      if (finalData.files && finalData.files.length > 0) {
+        for (const file of finalData.files) {
+          const base64 = await fileToBase64(file);
+          base64Files.push({
+            name: file.name,
+            mimeType: file.type || 'application/octet-stream',
+            base64: base64
+          });
+        }
+      }
+
+      const payload = {
+        timestamp: finalData.timestamp || new Date().toLocaleString('ko-KR'),
+        projectName: finalData.projectName,
+        contact: finalData.contact,
+        spaceType: finalData.spaceType,
+        preferredStyle: finalData.preferredStyle,
+        keyPoints: finalData.keyPoints,
+        files: base64Files
+      };
+
+      await fetch(WEB_APP_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'text/plain;charset=utf-8',
+        },
+        body: JSON.stringify(payload)
+      });
+      
+      // Remove file objects before setting to state to avoid serialization issues
+      delete finalData.files;
+
     } catch (e) {
       console.error('Failed to process submission:', e);
       alert('데이터 저장 중 오류가 발생했습니다.');
@@ -143,9 +185,11 @@ export default function App() {
             <Box size={20} className="text-gray-300" />
             <span className="text-sm font-bold text-gray-300 tracking-wider">STUDIO 3D</span>
           </div>
-          <p className="text-xs text-gray-400 font-medium">
-            &copy; {new Date().getFullYear()} STUDIO 3D. All rights reserved.
-          </p>
+          <div className="flex items-center gap-4">
+            <p className="text-xs text-gray-400 font-medium">
+              &copy; {new Date().getFullYear()} STUDIO 3D. All rights reserved.
+            </p>
+          </div>
         </div>
       </footer>
     </div>

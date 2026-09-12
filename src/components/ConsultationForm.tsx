@@ -28,6 +28,7 @@ const Section = ({ title, icon: Icon, children, description }: { title: string, 
 export function ConsultationForm({ onSubmit, isSubmitting }: Props) {
   const [formData, setFormData] = useState<Partial<ConsultationData>>({
     fileNames: [],
+    files: [],
   });
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -39,17 +40,19 @@ export function ConsultationForm({ onSubmit, isSubmitting }: Props) {
   };
 
   const handleFiles = (files: File[]) => {
-    const newFiles = files.map(f => f.name);
+    const newFileNames = files.map(f => f.name);
     setFormData(prev => ({
       ...prev,
-      fileNames: [...(prev.fileNames || []), ...newFiles]
+      fileNames: [...(prev.fileNames || []), ...newFileNames],
+      files: [...(prev.files || []), ...files]
     }));
   };
 
   const removeFile = (indexToRemove: number) => {
     setFormData(prev => ({
       ...prev,
-      fileNames: prev.fileNames?.filter((_, index) => index !== indexToRemove)
+      fileNames: prev.fileNames?.filter((_, index) => index !== indexToRemove),
+      files: prev.files?.filter((_, index) => index !== indexToRemove)
     }));
   };
 
@@ -80,6 +83,7 @@ export function ConsultationForm({ onSubmit, isSubmitting }: Props) {
       preferredStyle: formData.preferredStyle || '',
       keyPoints: formData.keyPoints || '',
       fileNames: formData.fileNames || [],
+      files: formData.files || [],
       timestamp: new Date().toLocaleString('ko-KR'),
     });
   };
